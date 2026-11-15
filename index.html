@@ -114,16 +114,16 @@ textarea{
 .syms{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));gap:var(--kgap)}
 .marks{grid-auto-rows:calc(var(--kh)*.8)}
 .key{
-  position:relative;min-width:0;height:var(--kh);padding:0 0 4px;border:0;border-radius:9px;
+  position:relative;min-width:0;height:var(--kh);padding:7px 0 0;border:0;border-radius:9px;
   background:linear-gradient(180deg,var(--key-top),var(--key-bot));
   box-shadow:0 3px 0 var(--key-edge),inset 0 1px 0 var(--key-hi);
-  display:flex;align-items:flex-end;justify-content:center;
+  display:flex;align-items:center;justify-content:center;
   cursor:pointer;user-select:none;-webkit-user-select:none;
   -webkit-tap-highlight-color:transparent;touch-action:manipulation;color:var(--ink)
 }
 .key:hover{filter:brightness(1.04)}
 .key:active,.key.down{transform:translateY(2px);box-shadow:0 1px 0 var(--key-edge),inset 0 1px 0 var(--key-hi)}
-.key .ar{font:700 clamp(17px,3.3vw,30px)/1 var(--text-font);color:var(--glyph);pointer-events:none}
+.key .ar{font:700 clamp(15px,2.7vw,24px)/1.25 var(--body);color:var(--glyph);pointer-events:none;text-align:center;white-space:nowrap}
 .key .lat{position:absolute;top:3px;left:5px;font:600 clamp(8px,1.3vw,11px)/1 var(--body);color:var(--latin);pointer-events:none}
 .key.fn{
   background:linear-gradient(180deg,var(--fn-top),var(--fn-bot));color:var(--fn-ink);
@@ -132,7 +132,8 @@ textarea{
 .key.fn.act{color:var(--accent)}
 .key.fn:disabled{cursor:default;opacity:.8;filter:none;transform:none}
 .key.enter{font-size:clamp(11px,1.8vw,15px);flex-direction:column;gap:4px;height:auto}
-.key.mark .ar{font-size:clamp(20px,3.4vw,28px);padding-bottom:2px}
+.key.mark{padding-top:0}
+.key.mark .ar{font:700 clamp(20px,3.4vw,28px)/1 var(--text-font)}
 
 /* number to words */
 .tf-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
