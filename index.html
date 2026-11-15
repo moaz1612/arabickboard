@@ -161,6 +161,23 @@ kbd{font:600 13px var(--body);padding:1px 7px;border-radius:6px;border:1px solid
   textarea{font-size:24px;min-height:150px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* تفقيط */
+main{display:grid;gap:20px}
+.tf-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.tf .field{display:grid;gap:6px;color:var(--muted);font-size:14px}
+.tf input[type=text]{
+  height:44px;width:100%;border:1px solid var(--line);border-radius:10px;background:var(--field);color:var(--ink);
+  padding:0 14px;font:600 18px var(--body);font-variant-numeric:tabular-nums
+}
+.tf select{height:44px;width:100%;font-size:16px}
+.tf-out{
+  min-height:72px;padding:14px 18px;border:1px solid var(--line);border-radius:12px;background:var(--field);
+  font:400 clamp(20px,3.6vw,26px)/1.9 var(--text-font);overflow-wrap:anywhere
+}
+.tf-out.empty{color:var(--muted);font:400 15px/1.9 var(--body)}
+.tf .grow{flex:1 1 140px;min-height:1.7em;color:var(--accent);font-weight:600;font-size:14px}
+@media (max-width:640px){.tf-row{grid-template-columns:minmax(0,1fr)}}
 </style>
 <style>body{margin:0}</style>
 </head>
@@ -170,7 +187,6 @@ kbd{font:600 13px var(--body);padding:1px 7px;border-radius:6px;border:1px solid
 <div class="app" dir="rtl" lang="ar">
   <header class="head">
     <div class="brand"><span class="mark" aria-hidden="true">ع</span><h1>لوحة المفاتيح العربية</h1></div>
-    <p class="lead">اكتب بالعربي بالضغط على الحروف أو بكيبوردك الإنجليزي، ثم انسخ النص والصقه في أي مكان.</p>
   </header>
 
   <main>
@@ -219,28 +235,31 @@ kbd{font:600 13px var(--body);padding:1px 7px;border-radius:6px;border:1px solid
         <label class="chk" id="nativeWrap" hidden><input type="checkbox" id="native"> إظهار كيبورد الهاتف</label>
       </div>
     </section>
-  </main>
 
-  <section class="notes" aria-label="طريقة الاستخدام">
-    <div class="card">
-      <h2>طريقة الاستخدام</h2>
-      <ol class="steps">
-        <li>اضغط على الحروف في اللوحة، أو اكتب مباشرة بكيبوردك فيتحول كل زر إنجليزي إلى الحرف العربي الذي في مكانه.</li>
-        <li>استخدم <kbd>Shift</kbd> للرموز وعلامات التشكيل، أو اضغط على علامة من صف التشكيل بعد الحرف مباشرة.</li>
-        <li>اضغط «نسخ النص» ثم الصقه في Word أو واتساب أو أي موقع.</li>
-      </ol>
-    </div>
-    <div class="card">
-      <h2>كل زر إنجليزي وحرفه</h2>
-      <p class="cap">هذا ما يخرج عند الكتابة بكيبورد الكمبيوتر وخيار التحويل مفعّل.</p>
-      <div class="map" id="map"></div>
-    </div>
-  </section>
+    <section class="desk tf" aria-label="تفقيط الأرقام">
+      <h2>تفقيط الأرقام</h2>
+      <div class="tf-row">
+        <label class="field" for="tfNum">المبلغ
+          <input id="tfNum" type="text" inputmode="decimal" dir="ltr" autocomplete="off" value="1250.75" placeholder="1250.75">
+        </label>
+        <label class="field" for="tfCur">العملة
+          <select id="tfCur"></select>
+        </label>
+      </div>
+      <div id="tfOut" class="tf-out" role="status" aria-live="polite"></div>
+      <div class="bar">
+        <button type="button" class="btn primary" id="tfCopy">نسخ التفقيط</button>
+        <button type="button" class="btn" id="tfInsert">إدراج في المحرر</button>
+        <label class="chk"><input type="checkbox" id="tfWrap" checked> إضافة «فقط» و«لا غير»</label>
+        <span class="grow" id="tfStatus" role="status" aria-live="polite"></span>
+      </div>
+    </section>
+  </main>
 
   <section class="faq" aria-label="أسئلة شائعة">
     <details>
       <summary>كيف أكتب بالعربي بكيبورد إنجليزي؟</summary>
-      <p>اترك خيار «تحويل أزرار كيبوردك» مفعّلًا واكتب كالمعتاد. الزر Q يعطي ض، والزر A يعطي ش، وهكذا حسب الجدول أعلاه. يعمل هذا مهما كانت لغة الكيبورد المفعّلة في جهازك.</p>
+      <p>اترك خيار «تحويل أزرار كيبوردك» مفعّلًا واكتب كالمعتاد. الزر Q يعطي ض، والزر A يعطي ش، وهكذا. يعمل هذا مهما كانت لغة الكيبورد المفعّلة في جهازك.</p>
     </details>
     <details>
       <summary>كيف أضيف التشكيل؟</summary>
@@ -337,20 +356,6 @@ function chip(text,cap,cls){
 HARAKAT.forEach(function(h){$('harakat').appendChild(chip(h[0],h[1]))});
 SYMBOLS.forEach(function(s){$('symbols').appendChild(chip(s,''))});
 
-/* letter map card */
-(function(){
-  var map=$('map'), rows=[[ROWS[0][0]],ROWS[1].slice(1,13),ROWS[2].slice(1,12),ROWS[3].slice(1,11)];
-  rows.forEach(function(list){
-    var r=document.createElement('div'); r.className='map-row';
-    list.forEach(function(d){
-      var m=document.createElement('div'); m.className='m';
-      var b=document.createElement('b'); b.textContent=d.lat;
-      var s=document.createElement('span'); s.textContent=d.n;
-      m.appendChild(b); m.appendChild(s); r.appendChild(m);
-    });
-    map.appendChild(r);
-  });
-})();
 
 /* ---- text editing ---- */
 function fire(){ed.dispatchEvent(new Event('input',{bubbles:true}))}
@@ -487,6 +492,135 @@ function save(){
   },250);
 }
 ed.addEventListener('input',function(){isSample=false;stats();save()});
+
+/* ---- تفقيط الأرقام ---- */
+var TF_ONES_M=['','واحد','اثنان','ثلاثة','أربعة','خمسة','ستة','سبعة','ثمانية','تسعة','عشرة'];
+var TF_ONES_F=['','واحدة','اثنتان','ثلاث','أربع','خمس','ست','سبع','ثماني','تسع','عشر'];
+var TF_TEENS_M=['أحد عشر','اثنا عشر','ثلاثة عشر','أربعة عشر','خمسة عشر','ستة عشر','سبعة عشر','ثمانية عشر','تسعة عشر'];
+var TF_TEENS_F=['إحدى عشرة','اثنتا عشرة','ثلاث عشرة','أربع عشرة','خمس عشرة','ست عشرة','سبع عشرة','ثماني عشرة','تسع عشرة'];
+var TF_TENS=['','','عشرون','ثلاثون','أربعون','خمسون','ستون','سبعون','ثمانون','تسعون'];
+var TF_HUND=['','مائة','مائتان','ثلاثمائة','أربعمائة','خمسمائة','ستمائة','سبعمائة','ثمانمائة','تسعمائة'];
+var TF_SCALE=[null,
+  ['ألف','ألفان','آلاف','ألفًا'],
+  ['مليون','مليونان','ملايين','مليونًا'],
+  ['مليار','ملياران','مليارات','مليارًا'],
+  ['تريليون','تريليونان','تريليونات','تريليونًا']];
+
+function tfAdj(stem){return [stem+'ي',stem+'يان',stem+'ية',stem+'يًا']}
+var TF_FILS=['فلس','فلسان','فلوس','فلسًا'];
+var TF_CUR={
+  EGP:{label:'جنيه مصري',maj:['جنيه','جنيهان','جنيهات','جنيهًا'],adj:tfAdj('مصر'),min:['قرش','قرشان','قروش','قرشًا'],mf:false,d:2},
+  SAR:{label:'ريال سعودي',maj:['ريال','ريالان','ريالات','ريالًا'],adj:tfAdj('سعود'),min:['هللة','هللتان','هللات','هللةً'],mf:true,d:2},
+  AED:{label:'درهم إماراتي',maj:['درهم','درهمان','دراهم','درهمًا'],adj:tfAdj('إمارات'),min:TF_FILS,mf:false,d:2},
+  QAR:{label:'ريال قطري',maj:['ريال','ريالان','ريالات','ريالًا'],adj:tfAdj('قطر'),min:['درهم','درهمان','دراهم','درهمًا'],mf:false,d:2},
+  KWD:{label:'دينار كويتي',maj:['دينار','ديناران','دنانير','دينارًا'],adj:tfAdj('كويت'),min:TF_FILS,mf:false,d:3},
+  BHD:{label:'دينار بحريني',maj:['دينار','ديناران','دنانير','دينارًا'],adj:tfAdj('بحرين'),min:TF_FILS,mf:false,d:3},
+  OMR:{label:'ريال عماني',maj:['ريال','ريالان','ريالات','ريالًا'],adj:tfAdj('عمان'),min:['بيسة','بيستان','بيسات','بيسةً'],mf:true,d:3},
+  JOD:{label:'دينار أردني',maj:['دينار','ديناران','دنانير','دينارًا'],adj:tfAdj('أردن'),min:TF_FILS,mf:false,d:3},
+  USD:{label:'دولار أمريكي',maj:['دولار','دولاران','دولارات','دولارًا'],adj:tfAdj('أمريك'),min:['سنت','سنتان','سنتات','سنتًا'],mf:false,d:2},
+  EUR:{label:'يورو',maj:['يورو','يورو','يورو','يورو'],adj:null,inv:true,min:['سنت','سنتان','سنتات','سنتًا'],mf:false,d:2},
+  GBP:{label:'جنيه إسترليني',maj:['جنيه','جنيهان','جنيهات','جنيهًا'],adj:tfAdj('إسترلين'),min:['بنس','بنسان','بنسات','بنسًا'],mf:false,d:2},
+  MAD:{label:'درهم مغربي',maj:['درهم','درهمان','دراهم','درهمًا'],adj:tfAdj('مغرب'),min:['سنتيم','سنتيمان','سنتيمات','سنتيمًا'],mf:false,d:2},
+  TND:{label:'دينار تونسي',maj:['دينار','ديناران','دنانير','دينارًا'],adj:tfAdj('تونس'),min:['مليم','مليمان','مليمات','مليمًا'],mf:false,d:3}
+};
+
+function tfBelow100(r,fem){
+  var ones=fem?TF_ONES_F:TF_ONES_M;
+  if(r<=10)return ones[r];
+  if(r<20)return (fem?TF_TEENS_F:TF_TEENS_M)[r-11];
+  var u=r%10,t=(r-u)/10;
+  return u?ones[u]+' و'+TF_TENS[t]:TF_TENS[t];
+}
+function tfBelow1000(n,fem){
+  var h=Math.floor(n/100),r=n%100,p=[];
+  if(h)p.push(TF_HUND[h]);
+  if(r)p.push(tfBelow100(r,fem));
+  return p.join(' و');
+}
+function tfInt(big,fem,bare){
+  if(big===0n)return 'صفر';
+  var groups=[],x=big;
+  while(x>0n){groups.push(Number(x%1000n));x=x/1000n}
+  var low=0;while(!groups[low])low++;
+  var parts=[];
+  for(var s=groups.length-1;s>=0;s--){
+    var g=groups[s];if(!g)continue;
+    if(s===0){parts.push(tfBelow1000(g,fem));continue}
+    var sc=TF_SCALE[s],r=g%100,w;
+    if(g===1)w=sc[0];
+    else if(g===2)w=sc[1];
+    else{
+      var base=tfBelow1000(g,false);
+      if(r<=2)w=base.replace(/مائتان$/,'مائتا')+' '+sc[0];
+      else if(r<=10)w=base+' '+sc[2];
+      else if(bare&&s===low)w=base+' '+sc[0];
+      else w=base+' '+sc[3];
+    }
+    parts.push(w);
+  }
+  return parts.join(' و');
+}
+function tfCount(n,fem,noun,adj,inv){
+  var r=Number(n%100n);
+  function a(i){return adj?' '+adj[i]:''}
+  if(n===1n)return noun[0]+a(0)+' '+(fem?'واحدة':'واحد');
+  if(n===2n)return inv?(fem?'اثنتان ':'اثنان ')+noun[0]:noun[1]+a(1);
+  var words=tfInt(n,fem,true);
+  if(r===0)words=words.replace(/مائتان$/,'مائتا');
+  var i=r<=2?0:(r<=10?2:3);
+  return words+' '+noun[i]+a(i);
+}
+function tafqeet(str,code,wrap){
+  var c=TF_CUR[code];if(!c)return null;
+  var s=String(str).replace(/[٠-٩]/g,function(d){return '٠١٢٣٤٥٦٧٨٩'.indexOf(d)})
+    .replace(/[\s,٬،]/g,'').replace(/٫/g,'.');
+  if(!/^\d+(\.\d+)?$/.test(s))return null;
+  var bits=s.split('.'),ip=bits[0].replace(/^0+(?=\d)/,''),fp=bits[1]||'';
+  if(ip.length>15)return null;
+  var d=c.d,total=BigInt(ip+fp.padEnd(d,'0').slice(0,d));
+  if(fp.length>d&&fp.charAt(d)>='5')total+=1n;
+  var base=10n**BigInt(d),maj=total/base,mnr=total%base,parts=[];
+  if(maj>0n)parts.push(tfCount(maj,false,c.maj,c.adj,c.inv));
+  if(mnr>0n)parts.push(tfCount(mnr,c.mf,c.min,null,c.inv));
+  if(!parts.length)parts.push('صفر '+c.maj[0]+(c.adj?' '+c.adj[0]:''));
+  var t=parts.join(' و');
+  return wrap?'فقط '+t+' لا غير':t;
+}
+
+/* ---- واجهة التفقيط ---- */
+(function(){
+  var num=$('tfNum'),cur=$('tfCur'),out=$('tfOut'),wrap=$('tfWrap'),st=$('tfStatus'),tmr=null,valid=false;
+  Object.keys(TF_CUR).forEach(function(code){
+    var o=document.createElement('option');o.value=code;o.textContent=TF_CUR[code].label;cur.appendChild(o);
+  });
+  try{var saved=localStorage.getItem('arabic-keyboard-tf-cur');if(saved&&TF_CUR[saved])cur.value=saved}catch(e){}
+  function say(m){st.textContent=m;clearTimeout(tmr);tmr=setTimeout(function(){st.textContent=''},2800)}
+  function update(){
+    var v=num.value.trim();
+    if(!v){out.textContent='اكتب مبلغًا لتظهر الكتابة بالحروف هنا';out.classList.add('empty');valid=false;return}
+    var r=tafqeet(v,cur.value,wrap.checked);
+    if(r===null){out.textContent='اكتب أرقامًا فقط، حتى 15 رقمًا، وبينها علامة عشرية واحدة إن لزم';out.classList.add('empty');valid=false;return}
+    out.textContent=r;out.classList.remove('empty');valid=true;
+  }
+  num.addEventListener('input',update);
+  wrap.addEventListener('change',update);
+  cur.addEventListener('change',function(){update();try{localStorage.setItem('arabic-keyboard-tf-cur',cur.value)}catch(e){}});
+  $('tfCopy').addEventListener('click',function(){
+    if(!valid){say('اكتب مبلغًا صحيحًا أولًا');return}
+    var t=out.textContent;
+    function fb(){
+      var ok=false;
+      try{var r=document.createRange();r.selectNodeContents(out);var s=window.getSelection();s.removeAllRanges();s.addRange(r);ok=document.execCommand('copy')}catch(e){}
+      say(ok?'تم نسخ التفقيط':'حدّد النص وانسخه بـ Ctrl+C');
+    }
+    try{navigator.clipboard.writeText(t).then(function(){say('تم نسخ التفقيط')},fb)}catch(e){fb()}
+  });
+  $('tfInsert').addEventListener('click',function(){
+    if(!valid){say('اكتب مبلغًا صحيحًا أولًا');return}
+    put(out.textContent);say('تم الإدراج في المحرر');
+  });
+  update();
+})();
 
 /* ---- init ---- */
 (function(){
