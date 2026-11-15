@@ -20,6 +20,7 @@
   --key-top:#FFFFFF; --key-bot:#E3E9EE; --key-edge:#97A5B0; --key-hi:#FFFFFF;
   --fn-top:#D3DBE2; --fn-bot:#BFCAD3; --fn-ink:#4A5963;
   --glyph:#0B6E5E; --latin:#5A6A76;
+  --foot-bg:#1D3E4E; --foot-ink:#E4EEF2;
   --display:"Tajawal","Cairo",system-ui,sans-serif;
   --body:"Cairo",system-ui,-apple-system,"Segoe UI",sans-serif;
   --text-font:"Amiri","Noto Naskh Arabic","Traditional Arabic",serif;
@@ -34,6 +35,7 @@
     --key-top:#2D3D49; --key-bot:#22303A; --key-edge:#04070A; --key-hi:#415463;
     --fn-top:#1C2831; --fn-bot:#16212A; --fn-ink:#8D9FAC;
     --glyph:#4DD0B4; --latin:#8FA1AE;
+    --foot-bg:#101A21; --foot-ink:#B9C8D1;
     color-scheme:dark;
   }
 }
@@ -45,6 +47,7 @@
   --key-top:#2D3D49; --key-bot:#22303A; --key-edge:#04070A; --key-hi:#415463;
   --fn-top:#1C2831; --fn-bot:#16212A; --fn-ink:#8D9FAC;
   --glyph:#4DD0B4; --latin:#8FA1AE;
+    --foot-bg:#101A21; --foot-ink:#B9C8D1;
   color-scheme:dark;
 }
 *,*::before,*::after{box-sizing:border-box}
@@ -152,7 +155,26 @@ select{height:44px;width:100%;border-radius:10px;border:1px solid var(--line);ba
   font:400 clamp(20px,3.6vw,26px)/1.9 var(--text-font);overflow-wrap:anywhere
 }
 .tf-out.empty{color:var(--muted);font:400 15px/1.9 var(--body)}
-.foot{color:var(--muted);font-size:14px;text-align:center;margin:6px 0 0}
+.info{display:grid;gap:26px;padding-inline:4px}
+.info section{scroll-margin-top:16px}
+.info h2.q{
+  display:flex;align-items:center;gap:10px;margin:0 0 10px;padding-bottom:6px;
+  border-bottom:1px dashed var(--line);font:800 clamp(18px,3vw,21px)/1.5 var(--display)
+}
+.info h2.q::before{content:"◀";color:var(--accent);font-size:13px}
+.info p{margin:0 0 10px;max-width:72ch}
+.info ol{margin:0 0 12px;padding-inline-start:24px;display:grid;gap:8px;max-width:72ch}
+.info ol li::marker{color:var(--accent);font-weight:700}
+kbd{font:600 13px var(--body);padding:1px 7px;border-radius:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.combo{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 4px;padding:0;list-style:none}
+.combo li{display:inline-flex;align-items:center;gap:8px;padding:4px 10px;border:1px solid var(--line);border-radius:9px;background:var(--surface)}
+.combo .a{font:700 22px/1.3 var(--text-font);color:var(--accent)}
+.site-foot{
+  background:var(--foot-bg);color:var(--foot-ink);border-radius:14px;padding:16px 20px;
+  display:flex;flex-wrap:wrap;gap:6px 24px;justify-content:space-between;align-items:center;font-size:14px
+}
+.site-foot a{color:var(--foot-ink);text-underline-offset:3px}
+.site-foot strong{font-weight:700}
 
 #printArea{display:none}
 @media print{
@@ -230,7 +252,48 @@ select{height:44px;width:100%;border-radius:10px;border:1px solid var(--line);ba
     </section>
   </main>
 
-  <p class="foot">يعمل كله داخل متصفحك، بدون تسجيل وبدون تثبيت.</p>
+  <section class="info" aria-label="عن الموقع">
+    <section>
+      <h2 class="q">ما هذا الموقع؟</h2>
+      <p>أداة مجانية للكتابة بالعربية من أي جهاز، لمن لا يملك كيبورد عربيًا: المسافرون، ومتعلمو اللغة، ومن يستخدم حاسوبًا مشتركًا أو هاتفًا بلا لغة عربية. اكتب بالضغط على الحروف أو بكيبوردك الإنجليزي، ثم انسخ النص والصقه في أي مكان. وفي الأسفل أداة تفقيط تحوّل الأرقام إلى كلمات بعملات مختلفة.</p>
+    </section>
+    <section>
+      <h2 class="q">كيف أستخدم لوحة المفاتيح؟</h2>
+      <ol>
+        <li>بالماوس أو اللمس: اضغط على الحرف المطلوب فيظهر في المحرر.</li>
+        <li>بكيبورد الجهاز: فعّل «كتابة صوتية» واكتب بالحروف الإنجليزية، وكل زر مكتوب عليه الحرف الذي يعطيه. مثلًا <kbd dir="ltr">d</kbd> تعطي د، و<kbd dir="ltr">D</kbd> بحرف كبير تعطي ض.</li>
+        <li>بعض الحروف تُكتب بحرفين، اكتبهما بالترتيب:</li>
+      </ol>
+      <ul class="combo" dir="ltr" aria-label="التركيبات">
+        <li><kbd>ch</kbd><span class="a">ش</span></li>
+        <li><kbd>3'</kbd><span class="a">غ</span></li>
+        <li><kbd>d*</kbd><span class="a">ذ</span></li>
+        <li><kbd>a'</kbd><span class="a">أ</span></li>
+        <li><kbd>i'</kbd><span class="a">ئ</span></li>
+        <li><kbd>w'</kbd><span class="a">ؤ</span></li>
+        <li><kbd>T'</kbd><span class="a">ظ</span></li>
+      </ul>
+      <p>أضف التشكيل من المربع الصغير على يسار الصف الأخير، واضغط الحرف أولًا ثم العلامة. أرقام 2 و3 و7 تعطي ء وع وح عند الكتابة الصوتية، ولكتابة الأرقام العربية استخدم صف الأرقام على الشاشة.</p>
+    </section>
+    <section>
+      <h2 class="q">مشاكل عند اللصق في Word أو Outlook؟</h2>
+      <p>إن ظهر النص مقلوبًا أو متقطعًا بعد اللصق، فجرّب التالي:</p>
+      <ol>
+        <li>اختر خطًا يدعم العربية مثل Arial أو Tahoma أو Traditional Arabic.</li>
+        <li>فعّل اتجاه الكتابة من اليمين إلى اليسار بالضغط على <kbd dir="ltr">Ctrl</kbd> + <kbd dir="ltr">Shift</kbd> الأيمن.</li>
+        <li>الصق كنص عادي بدون تنسيق: <kbd dir="ltr">Ctrl</kbd> + <kbd dir="ltr">Shift</kbd> + <kbd dir="ltr">V</kbd>.</li>
+      </ol>
+    </section>
+    <section id="privacy">
+      <h2 class="q">الخصوصية</h2>
+      <p>لا تحتاج إلى حساب. ما تكتبه يُحفظ في متصفحك أنت فقط ولا يُرسل إلى أي خادم تابع للموقع. زر «ترجمة» يفتح خدمة جوجل ترجمة ويرسل إليها النص عند الضغط عليه فقط. وتُحمَّل خطوط الصفحة من خطوط جوجل. لمسح ما حُفظ، امسح بيانات الموقع من إعدادات المتصفح.</p>
+    </section>
+  </section>
+
+  <footer class="site-foot">
+    <span><strong>© 2026 لوحة المفاتيح العربية</strong> · اكتب بالعربية بسهولة واحترافية</span>
+    <a href="#privacy">الخصوصية</a>
+  </footer>
 </div>
 <div id="printArea" dir="rtl" aria-hidden="true"></div>
 
