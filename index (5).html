@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>لوحة المفاتيح العربية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&family=Noto+Kufi+Arabic:wght@400;600&family=Noto+Naskh+Arabic:wght@400;600&family=Tajawal:wght@500;700;800&display=swap">
+<style>
+/* Layout: one working card (editor, then a physical-style keyboard deck with diacritics and symbols), reference notes underneath. */
+:root{
+  --bg:#EDF0F2; --surface:#FFFFFF; --field:#F8FAFB; --deck:#DCE3E8;
+  --ink:#121B22; --muted:#53626D; --line:#CFD7DD;
+  --accent:#0B6E5E; --accent-ink:#FFFFFF; --accent-soft:#D3EDE7;
+  --key:#FFFFFF; --key-fn:#EAEFF2; --key-edge:#B4C0C8; --key-ring:#D0D9DF;
+  --display:"Tajawal","Cairo",system-ui,sans-serif;
+  --body:"Cairo",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --text-font:"Amiri","Noto Naskh Arabic","Traditional Arabic",serif;
+  --kgap:clamp(3px,.8vw,7px); --kh:clamp(38px,6.4vw,54px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E151B; --surface:#151E26; --field:#0F171D; --deck:#0B1116;
+    --ink:#E7EEF2; --muted:#96A6B2; --line:#26333D;
+    --accent:#4DD0B4; --accent-ink:#06231D; --accent-soft:#143730;
+    --key:#26333E; --key-fn:#1C2831; --key-edge:#05090C; --key-ring:#32424F;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E151B; --surface:#151E26; --field:#0F171D; --deck:#0B1116;
+  --ink:#E7EEF2; --muted:#96A6B2; --line:#26333D;
+  --accent:#4DD0B4; --accent-ink:#06231D; --accent-soft:#143730;
+  --key:#26333E; --key-fn:#1C2831; --key-edge:#05090C; --key-ring:#32424F;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{
+  background:var(--bg); color:var(--ink);
+  font:400 16px/1.7 var(--body);
+  padding-block:24px 56px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+button,select,input,textarea{font-family:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.app{max-width:1000px;margin-inline:auto;display:grid;gap:20px}
+
+/* header */
+.head{display:grid;gap:6px}
+.brand{display:flex;align-items:center;gap:12px}
+.mark{
+  width:44px;height:44px;border-radius:12px;background:var(--accent);color:var(--accent-ink);
+  display:grid;place-items:center;font:700 28px/1 var(--display);padding-bottom:4px;
+  box-shadow:0 3px 0 var(--key-edge);
+}
+h1{margin:0;font:700 clamp(24px,4.6vw,34px)/1.3 var(--display);text-wrap:balance}
+.lead{margin:0;color:var(--muted);max-width:62ch}
+
+/* editor card */
+.desk{
+  background:var(--surface);border:1px solid var(--line);border-radius:18px;
+  padding:clamp(12px,2.4vw,22px);display:grid;gap:14px;min-width:0
+}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{
+  font:600 15px/1 var(--body);height:40px;padding:0 14px;border-radius:10px;
+  border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;
+  touch-action:manipulation
+}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.primary:hover{filter:brightness(1.08)}
+.sep{flex:1 1 8px}
+.field{display:inline-flex;align-items:center;gap:8px;color:var(--muted);font-size:14px}
+select{
+  height:40px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);
+  padding:0 10px;font-size:15px;max-width:100%
+}
+.size{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:10px;overflow:hidden;height:40px}
+.size button{
+  width:40px;height:100%;border:0;background:var(--surface);color:var(--ink);font:700 16px var(--body);cursor:pointer
+}
+.size button:hover{background:var(--accent-soft)}
+.size output{min-width:36px;text-align:center;font:600 14px var(--body);color:var(--muted);font-variant-numeric:tabular-nums}
+textarea{
+  width:100%;min-height:170px;resize:vertical;display:block;
+  padding:16px 18px;border:1px solid var(--line);border-radius:12px;
+  background:var(--field);color:var(--ink);
+  font-family:var(--text-font);font-size:28px;line-height:1.9;text-align:start
+}
+.meta{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;font-size:14px;color:var(--muted)}
+.meta .grow{flex:1 1 140px;min-height:1.7em;color:var(--accent);font-weight:600}
+.meta a{color:var(--accent);font-weight:600;text-underline-offset:3px}
+.num{font-variant-numeric:tabular-nums}
+
+/* keyboard deck */
+.deck{background:var(--deck);border:1px solid var(--line);border-radius:14px;padding:clamp(8px,1.6vw,14px);display:grid;gap:12px;min-width:0}
+.kb{display:flex;flex-direction:column;gap:var(--kgap)}
+.row{display:flex;gap:var(--kgap)}
+.row .key,.row .gap{min-width:0}
+.key{
+  position:relative;height:var(--kh);border:0;border-radius:8px;padding:0;
+  background:var(--key);color:var(--ink);
+  font:600 clamp(15px,2.7vw,22px)/1 var(--body);
+  box-shadow:0 2px 0 var(--key-edge),inset 0 0 0 1px var(--key-ring);
+  cursor:pointer;user-select:none;-webkit-user-select:none;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+  transition:background .08s
+}
+.key:hover{background:var(--accent-soft)}
+.key:active,.key.down{background:var(--accent-soft);transform:translateY(1px);box-shadow:0 1px 0 var(--key-edge),inset 0 0 0 1px var(--accent)}
+.key.fn{background:var(--key-fn);color:var(--muted);font-size:clamp(10px,1.8vw,14px)}
+.key.on,.key.fn.on{background:var(--accent);color:var(--accent-ink)}
+.key .alt,.key .lat{position:absolute;line-height:1;pointer-events:none;color:var(--muted)}
+.key .alt{top:5px;left:7px;font-size:11px}
+.key .lat{bottom:4px;right:7px;font-size:9px;opacity:.75;font-family:var(--body)}
+.key .main{pointer-events:none}
+.key.space{font-size:13px;color:var(--muted)}
+.strips{display:grid;gap:10px;border-top:1px solid var(--line);padding-top:12px}
+.strip{display:flex;gap:12px;align-items:flex-start}
+.strip-t{flex:0 0 56px;padding-top:12px;font:600 13px/1.2 var(--body);color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:var(--kgap);min-width:0}
+.chip{
+  height:52px;min-width:46px;padding:0 6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  font:400 24px/1 var(--text-font)
+}
+.chip small{font:600 10px/1 var(--body);color:var(--muted)}
+.chip.wide{min-width:56px}
+.opts{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:14px}
+.chk{display:inline-flex;align-items:center;gap:8px;cursor:pointer}
+.chk input{width:18px;height:18px;accent-color:var(--accent);margin:0}
+
+/* notes */
+.notes{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:clamp(14px,2.4vw,22px);min-width:0}
+h2{margin:0 0 10px;font:700 20px/1.4 var(--display)}
+.steps{margin:0;padding-inline-start:22px;display:grid;gap:8px}
+.steps li::marker{color:var(--accent);font-weight:700}
+.map{direction:ltr;display:grid;gap:6px}
+.map-row{display:flex;flex-wrap:wrap;gap:6px}
+.m{display:inline-flex;align-items:center;gap:8px;padding:3px 10px;border:1px solid var(--line);border-radius:8px;background:var(--field)}
+.m b{font:600 12px/1 var(--body);color:var(--muted);min-width:10px;text-align:center}
+.m span{font:700 21px/1.3 var(--text-font)}
+.cap{margin:0 0 10px;color:var(--muted);font-size:14px}
+.faq{display:grid;gap:8px}
+details{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:0 16px}
+summary{cursor:pointer;padding:12px 0;font-weight:600;list-style-position:inside}
+details[open] summary{color:var(--accent)}
+details p{margin:0 0 14px;color:var(--muted)}
+kbd{font:600 13px var(--body);padding:1px 7px;border-radius:6px;border:1px solid var(--line);background:var(--field);color:var(--ink)}
+.foot{color:var(--muted);font-size:14px;text-align:center;margin:6px 0 0}
+
+@media (max-width:640px){
+  .key .alt,.key .lat{display:none}
+  .strip{flex-direction:column;gap:6px}
+  .strip-t{flex:none;padding-top:0}
+  .sep{display:none}
+  textarea{font-size:24px;min-height:150px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<style>body{margin:0}</style>
+</head>
+<body>
+
+
+<div class="app" dir="rtl" lang="ar">
+  <header class="head">
+    <div class="brand"><span class="mark" aria-hidden="true">ع</span><h1>لوحة المفاتيح العربية</h1></div>
+    <p class="lead">اكتب بالعربي بالضغط على الحروف أو بكيبوردك الإنجليزي، ثم انسخ النص والصقه في أي مكان.</p>
+  </header>
+
+  <main>
+    <section class="desk" aria-label="محرر النص">
+      <div class="bar" role="toolbar" aria-label="أدوات النص">
+        <button type="button" class="btn primary" id="copy">نسخ النص</button>
+        <button type="button" class="btn" id="selAll">تحديد الكل</button>
+        <button type="button" class="btn" id="clear">مسح</button>
+        <span class="sep"></span>
+        <label class="field" for="font">الخط
+          <select id="font">
+            <option value="Amiri">أميري</option>
+            <option value="Noto Naskh Arabic">نسخ</option>
+            <option value="Cairo">كايرو</option>
+            <option value="Noto Kufi Arabic">كوفي</option>
+          </select>
+        </label>
+        <div class="size" role="group" aria-label="حجم الخط">
+          <button type="button" id="smaller" aria-label="تصغير الخط">أ−</button>
+          <output id="sizeOut" class="num">28</output>
+          <button type="button" id="bigger" aria-label="تكبير الخط">أ+</button>
+        </div>
+        <button type="button" class="btn" id="dir" aria-pressed="false">الكتابة من اليمين</button>
+      </div>
+
+      <textarea id="editor" dir="rtl" lang="ar" spellcheck="false" aria-label="النص" placeholder="اكتب هنا"></textarea>
+
+      <div class="meta">
+        <span class="num" id="count">0 حرف · 0 كلمة</span>
+        <span class="grow" id="status" role="status" aria-live="polite"></span>
+        <a id="gSearch" href="https://www.google.com/" target="_blank" rel="noopener">بحث في جوجل</a>
+        <a id="gTrans" href="https://translate.google.com/" target="_blank" rel="noopener">ترجمة</a>
+      </div>
+
+      <div class="deck">
+        <div id="kb" class="kb" dir="ltr" role="group" aria-label="لوحة مفاتيح عربية"></div>
+        <div class="strips">
+          <div class="strip"><span class="strip-t">التشكيل</span><div class="chips" id="harakat"></div></div>
+          <div class="strip"><span class="strip-t">رموز</span><div class="chips" id="symbols"></div></div>
+        </div>
+      </div>
+
+      <div class="opts">
+        <label class="chk"><input type="checkbox" id="phys" checked> تحويل أزرار كيبوردك إلى العربية</label>
+        <label class="chk"><input type="checkbox" id="digits"> أرقام عربية (١٢٣)</label>
+        <label class="chk" id="nativeWrap" hidden><input type="checkbox" id="native"> إظهار كيبورد الهاتف</label>
+      </div>
+    </section>
+  </main>
+
+  <section class="notes" aria-label="طريقة الاستخدام">
+    <div class="card">
+      <h2>طريقة الاستخدام</h2>
+      <ol class="steps">
+        <li>اضغط على الحروف في اللوحة، أو اكتب مباشرة بكيبوردك فيتحول كل زر إنجليزي إلى الحرف العربي الذي في مكانه.</li>
+        <li>استخدم <kbd>Shift</kbd> للرموز وعلامات التشكيل، أو اضغط على علامة من صف التشكيل بعد الحرف مباشرة.</li>
+        <li>اضغط «نسخ النص» ثم الصقه في Word أو واتساب أو أي موقع.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h2>كل زر إنجليزي وحرفه</h2>
+      <p class="cap">هذا ما يخرج عند الكتابة بكيبورد الكمبيوتر وخيار التحويل مفعّل.</p>
+      <div class="map" id="map"></div>
+    </div>
+  </section>
+
+  <section class="faq" aria-label="أسئلة شائعة">
+    <details>
+      <summary>كيف أكتب بالعربي بكيبورد إنجليزي؟</summary>
+      <p>اترك خيار «تحويل أزرار كيبوردك» مفعّلًا واكتب كالمعتاد. الزر Q يعطي ض، والزر A يعطي ش، وهكذا حسب الجدول أعلاه. يعمل هذا مهما كانت لغة الكيبورد المفعّلة في جهازك.</p>
+    </details>
+    <details>
+      <summary>كيف أضيف التشكيل؟</summary>
+      <p>اضغط على العلامة من صف التشكيل بعد الحرف. وبالكيبورد الفعلي: <kbd>Shift</kbd> + Q فتحة، + E ضمة، + A كسرة، + X سكون، وزر ` مع Shift شدّة.</p>
+    </details>
+    <details>
+      <summary>النص يظهر مقلوبًا أو متقطعًا بعد اللصق في Word؟</summary>
+      <p>اختر خطًا يدعم العربية مثل Arial أو Tahoma، وفعّل اتجاه الكتابة من اليمين إلى اليسار بالضغط على <kbd>Ctrl</kbd> + <kbd>Shift</kbd> الأيمن.</p>
+    </details>
+    <details>
+      <summary>هل يُحفظ ما أكتبه؟</summary>
+      <p>يُحفظ تلقائيًا في متصفحك فقط ولا يُرسل إلى أي مكان. زرّا البحث والترجمة يرسلان النص إلى جوجل عند الضغط عليهما فقط.</p>
+    </details>
+  </section>
+
+  <p class="foot">يعمل كله داخل متصفحك، بدون تسجيل وبدون تثبيت.</p>
+</div>
+
+<script>
+(function(){
+'use strict';
+var $=function(id){return document.getElementById(id)};
+var ed=$('editor'), kb=$('kb'), statusEl=$('status');
+var AR_DIGITS='٠١٢٣٤٥٦٧٨٩';
+var SAMPLE='أهلًا بك! جرّب الكتابة بالحروف التي في الأسفل.';
+var STORE='arabic-keyboard-v1';
+
+/* ---- layout data: code, normal, shifted, latin label, width units ---- */
+function K(code,n,s,lat,u,d){return {code:code,n:n,s:s,lat:lat,u:u||1,d:!!d}}
+function S(sp,code,label,u,aria){return {sp:sp,code:code,label:label,u:u,aria:aria}}
+var ROWS=[
+ [K('Backquote','ذ','ّ','`'),K('Digit1','1','!','1',1,1),K('Digit2','2','@','2',1,1),K('Digit3','3','#','3',1,1),K('Digit4','4','$','4',1,1),K('Digit5','5','%','5',1,1),K('Digit6','6','^','6',1,1),K('Digit7','7','&','7',1,1),K('Digit8','8','*','8',1,1),K('Digit9','9',')','9',1,1),K('Digit0','0','(','0',1,1),K('Minus','-','_','-'),K('Equal','=','+','='),S('back','Backspace','⌫',2,'حذف')],
+ [S('tab','Tab','Tab',1.5,'Tab'),K('KeyQ','ض','َ','Q'),K('KeyW','ص','ً','W'),K('KeyE','ث','ُ','E'),K('KeyR','ق','ٌ','R'),K('KeyT','ف','لإ','T'),K('KeyY','غ','إ','Y'),K('KeyU','ع','‘','U'),K('KeyI','ه','÷','I'),K('KeyO','خ','×','O'),K('KeyP','ح','؛','P'),K('BracketLeft','ج','<','['),K('BracketRight','د','>',']'),K('Backslash','\\','|','\\',1.5)],
+ [S('caps','CapsLock','⇪',1.75,'قفل Shift'),K('KeyA','ش','ِ','A'),K('KeyS','س','ٍ','S'),K('KeyD','ي',']','D'),K('KeyF','ب','[','F'),K('KeyG','ل','لأ','G'),K('KeyH','ا','أ','H'),K('KeyJ','ت','ـ','J'),K('KeyK','ن','،','K'),K('KeyL','م','/','L'),K('Semicolon','ك',':',';'),K('Quote','ط','"',"'"),S('enter','Enter','↵',2.25,'سطر جديد')],
+ [S('shiftL','ShiftLeft','Shift',2.25,'Shift'),K('KeyZ','ئ','~','Z'),K('KeyX','ء','ْ','X'),K('KeyC','ؤ','}','C'),K('KeyV','ر','{','V'),K('KeyB','لا','لآ','B'),K('KeyN','ى','آ','N'),K('KeyM','ة','’','M'),K('Comma','و',',',','),K('Period','ز','.','.'),K('Slash','ظ','؟','/'),S('shiftR','ShiftRight','Shift',2.75,'Shift')],
+ [{sp:'gap',u:3.5},S('space','Space','مسافة',8,'مسافة'),{sp:'gap',u:3.5}]
+];
+var HARAKAT=[['َ','فتحة'],['ُ','ضمة'],['ِ','كسرة'],['ْ','سكون'],['ّ','شدّة'],['ً','تنوين فتح'],['ٌ','تنوين ضم'],['ٍ','تنوين كسر'],['ٓ','مدّة'],['ـ','تطويل']];
+var SYMBOLS=['،','؛','؟','«','»','﴿','﴾','ﷲ','ﷺ','ﷻ','﷽','٪','٫','٬'];
+
+/* ---- state ---- */
+var shift=false, lock=false, physShift=false;
+var arDigits=false, phys=true, dirRtl=true, size=28, font='Amiri';
+var isSample=true, coarse=false;
+try{coarse=window.matchMedia('(pointer: coarse)').matches}catch(e){}
+
+function layer(){return shift||lock||physShift}
+function char(d,sh){
+  if(!sh){return (d.d&&arDigits)?AR_DIGITS.charAt(+d.n):d.n}
+  return d.s;
+}
+function disp(ch){return /^[ً-ْٰ]$/.test(ch)?'ـ'+ch:ch}
+
+/* ---- build keyboard ---- */
+var defs=[], byCode={}, shiftEls=[], capsEl=null;
+ROWS.forEach(function(row){
+  var r=document.createElement('div'); r.className='row';
+  row.forEach(function(d){
+    if(d.sp==='gap'){var g=document.createElement('div');g.className='gap';g.style.flex=d.u+' 1 0';r.appendChild(g);return}
+    var b=document.createElement('button');
+    b.type='button'; b.className='key'; b.style.flex=d.u+' 1 0'; b._d=d;
+    if(d.sp){
+      b.classList.add(d.sp==='space'?'space':'fn');
+      b.textContent=d.label; b.setAttribute('aria-label',d.aria);
+      if(d.sp==='shiftL'||d.sp==='shiftR') shiftEls.push(b);
+      if(d.sp==='caps') capsEl=b;
+    }else{
+      var alt=document.createElement('span');alt.className='alt';
+      var main=document.createElement('span');main.className='main';
+      var lat=document.createElement('span');lat.className='lat';lat.textContent=d.lat;
+      b.appendChild(alt);b.appendChild(main);b.appendChild(lat);
+      d.alt=alt;d.main=main;defs.push(d);
+    }
+    byCode[d.code]=b; r.appendChild(b);
+  });
+  kb.appendChild(r);
+});
+var defByCode={}; defs.forEach(function(d){defByCode[d.code]=d});
+
+function render(){
+  var sh=layer();
+  defs.forEach(function(d){d.main.textContent=disp(char(d,sh));d.alt.textContent=disp(char(d,!sh))});
+  shiftEls.forEach(function(b){b.classList.toggle('on',shift||lock||physShift)});
+  if(capsEl) capsEl.classList.toggle('on',lock);
+}
+
+function chip(text,cap,cls){
+  var b=document.createElement('button'); b.type='button'; b.className='key chip'+(cls?' '+cls:'');
+  b.dataset.ins=text;
+  var g=document.createElement('span'); g.textContent=cap?(text==='ـ'?text:'ـ'+text):text; b.appendChild(g);
+  if(cap){var s=document.createElement('small');s.textContent=cap;b.appendChild(s);b.classList.add('wide');b.setAttribute('aria-label',cap)}
+  return b;
+}
+HARAKAT.forEach(function(h){$('harakat').appendChild(chip(h[0],h[1]))});
+SYMBOLS.forEach(function(s){$('symbols').appendChild(chip(s,''))});
+
+/* letter map card */
+(function(){
+  var map=$('map'), rows=[[ROWS[0][0]],ROWS[1].slice(1,13),ROWS[2].slice(1,12),ROWS[3].slice(1,11)];
+  rows.forEach(function(list){
+    var r=document.createElement('div'); r.className='map-row';
+    list.forEach(function(d){
+      var m=document.createElement('div'); m.className='m';
+      var b=document.createElement('b'); b.textContent=d.lat;
+      var s=document.createElement('span'); s.textContent=d.n;
+      m.appendChild(b); m.appendChild(s); r.appendChild(m);
+    });
+    map.appendChild(r);
+  });
+})();
+
+/* ---- text editing ---- */
+function fire(){ed.dispatchEvent(new Event('input',{bubbles:true}))}
+function takeSample(){if(isSample){isSample=false;ed.focus({preventScroll:true});ed.select();setStatus('')}}
+function put(text){
+  takeSample();
+  ed.focus({preventScroll:true});
+  var ok=false;
+  try{ok=document.execCommand('insertText',false,text)}catch(e){}
+  if(!ok){var s=ed.selectionStart,e2=ed.selectionEnd;ed.setRangeText(text,s,e2,'end');fire()}
+}
+function back(){
+  takeSample();
+  ed.focus({preventScroll:true});
+  var ok=false;
+  try{ok=document.execCommand('delete')}catch(e){}
+  if(!ok){
+    var s=ed.selectionStart,e2=ed.selectionEnd;
+    if(s!==e2){ed.setRangeText('',s,e2,'end');fire()}
+    else if(s>0){ed.setRangeText('',s-1,e2,'end');fire()}
+  }
+}
+function act(d){
+  switch(d.sp){
+    case 'back': back(); break;
+    case 'tab': put('\t'); break;
+    case 'enter': put('\n'); break;
+    case 'space': put(' '); break;
+    case 'caps': lock=!lock; shift=false; render(); return;
+    case 'shiftL': case 'shiftR':
+      if(lock||shift){lock=false;shift=false}else{shift=true}
+      render(); return;
+    default: put(char(d,layer()));
+  }
+  if(shift){shift=false;render()}
+}
+
+/* on-screen keys */
+var repTimer=null, repInt=null;
+function stopRep(){clearTimeout(repTimer);clearInterval(repInt);repTimer=repInt=null}
+var deck=document.querySelector('.deck');
+deck.addEventListener('mousedown',function(e){if(e.target.closest('.key'))e.preventDefault()});
+deck.addEventListener('pointerdown',function(e){
+  var b=e.target.closest('.key'); if(!b||!b._d||b._d.sp!=='back')return;
+  back(); stopRep();
+  repTimer=setTimeout(function(){repInt=setInterval(back,60)},420);
+});
+['pointerup','pointercancel','blur'].forEach(function(t){window.addEventListener(t,stopRep)});
+deck.addEventListener('click',function(e){
+  var c=e.target.closest('[data-ins]');
+  if(c){put(c.dataset.ins);if(shift){shift=false;render()}return}
+  var b=e.target.closest('.key'); if(!b||!b._d)return;
+  if(b._d.sp==='back'&&e.detail>0)return;
+  act(b._d);
+});
+
+/* physical keyboard */
+function isIdle(t){return t===ed||t===document.body||t===document.documentElement}
+document.addEventListener('keydown',function(e){
+  if(!isIdle(e.target))return;
+  var el=byCode[e.code]; if(el&&e.code!=='CapsLock')el.classList.add('down');
+  if(e.key==='Shift'){physShift=true;render();return}
+  if(!phys||e.ctrlKey||e.metaKey||e.altKey||e.isComposing)return;
+  var d=defByCode[e.code]; if(!d)return;
+  e.preventDefault();
+  put(char(d,e.shiftKey));
+});
+document.addEventListener('keyup',function(e){
+  var el=byCode[e.code]; if(el)el.classList.remove('down');
+  if(e.key==='Shift'){physShift=false;render()}
+});
+window.addEventListener('blur',function(){
+  physShift=false;render();
+  Object.keys(byCode).forEach(function(k){byCode[k].classList.remove('down')});
+});
+ed.addEventListener('beforeinput',function(e){
+  if(isSample&&/^(insert|delete)/.test(e.inputType||'')){isSample=false;ed.select();setStatus('')}
+});
+
+/* ---- toolbar ---- */
+var msgTimer=null;
+function setStatus(m){statusEl.textContent=m}
+function say(m){setStatus(m);clearTimeout(msgTimer);msgTimer=setTimeout(function(){setStatus('')},2800)}
+$('copy').addEventListener('click',function(){
+  var t=ed.value;
+  if(!t.trim()){say('اكتب شيئًا أولًا ثم انسخه');return}
+  function fallback(){
+    ed.focus();ed.select();var ok=false;
+    try{ok=document.execCommand('copy')}catch(e){}
+    say(ok?'تم نسخ النص':'حدّد النص وانسخه بـ Ctrl+C');
+  }
+  try{
+    navigator.clipboard.writeText(t).then(function(){say('تم نسخ النص')},fallback);
+  }catch(e){fallback()}
+});
+$('selAll').addEventListener('click',function(){ed.focus();ed.select()});
+$('clear').addEventListener('click',function(){
+  isSample=false;ed.focus();ed.select();
+  var ok=false;try{ok=document.execCommand('delete')}catch(e){}
+  if(!ok){ed.value='';fire()}
+  say('تم المسح. اضغط Ctrl+Z للتراجع');
+});
+function applyFont(){ed.style.fontFamily='"'+font+'","Noto Naskh Arabic","Traditional Arabic",serif'}
+function applySize(){ed.style.fontSize=size+'px';$('sizeOut').textContent=size}
+function applyDir(){
+  ed.dir=dirRtl?'rtl':'ltr';
+  $('dir').textContent=dirRtl?'الكتابة من اليمين':'الكتابة من اليسار';
+  $('dir').setAttribute('aria-pressed',String(!dirRtl));
+}
+$('font').addEventListener('change',function(){font=this.value;applyFont();save()});
+$('smaller').addEventListener('click',function(){size=Math.max(16,size-2);applySize();save()});
+$('bigger').addEventListener('click',function(){size=Math.min(72,size+2);applySize();save()});
+$('dir').addEventListener('click',function(){dirRtl=!dirRtl;applyDir();save()});
+$('digits').addEventListener('change',function(){arDigits=this.checked;render();save()});
+$('phys').addEventListener('change',function(){phys=this.checked;save()});
+$('native').addEventListener('change',function(){
+  if(this.checked)ed.removeAttribute('inputmode');else ed.setAttribute('inputmode','none');
+});
+
+/* ---- stats and links ---- */
+function stats(){
+  var t=ed.value;
+  var words=t.trim()?t.trim().split(/\s+/).length:0;
+  $('count').textContent=t.length+' حرف · '+words+' كلمة';
+  var q=encodeURIComponent(t.trim().slice(0,1500));
+  $('gSearch').href=q?'https://www.google.com/search?q='+q:'https://www.google.com/';
+  $('gTrans').href=q?'https://translate.google.com/?sl=ar&tl=en&text='+q+'&op=translate':'https://translate.google.com/';
+}
+var saveTimer=null;
+function save(){
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(function(){
+    try{localStorage.setItem(STORE,JSON.stringify({t:isSample?null:ed.value,f:font,z:size,r:dirRtl,d:arDigits,p:phys}))}catch(e){}
+  },250);
+}
+ed.addEventListener('input',function(){isSample=false;stats();save()});
+
+/* ---- init ---- */
+(function(){
+  var st=null;
+  try{st=JSON.parse(localStorage.getItem(STORE)||'null')}catch(e){}
+  if(st){
+    if(typeof st.f==='string')font=st.f;
+    if(typeof st.z==='number')size=st.z;
+    if(typeof st.r==='boolean')dirRtl=st.r;
+    if(typeof st.d==='boolean')arDigits=st.d;
+    if(typeof st.p==='boolean')phys=st.p;
+    if(typeof st.t==='string'){ed.value=st.t;isSample=false}
+  }
+  if(isSample){ed.value=SAMPLE;setStatus('نص تجريبي: أول حرف تكتبه يستبدله')}
+  $('font').value=font;$('digits').checked=arDigits;$('phys').checked=phys;
+  if(coarse){ed.setAttribute('inputmode','none');$('nativeWrap').hidden=false}
+  applyFont();applySize();applyDir();render();stats();
+  if(!coarse){try{ed.focus({preventScroll:true})}catch(e){}}
+})();
+})();
+</script>
+
+</body>
+</html>
