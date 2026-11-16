@@ -55,13 +55,15 @@ body{
   background:var(--bg); color:var(--ink);
   font:400 16px/1.7 var(--body);
   padding-block:24px 56px;
+  overflow-x:clip;
   padding-left:max(16px,env(safe-area-inset-left,0px));
   padding-right:max(16px,env(safe-area-inset-right,0px));
 }
 button,select,input,textarea{font-family:inherit}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.app{max-width:1000px;margin-inline:auto;display:grid;gap:20px}
-main{display:grid;gap:20px}
+.app{max-width:1000px;margin-inline:auto;display:grid;grid-template-columns:minmax(0,1fr);gap:20px}
+.app>*{min-width:0}
+main{display:grid;grid-template-columns:minmax(0,1fr);gap:20px}
 
 .brand{display:flex;align-items:center;gap:12px}
 .mark{
@@ -77,7 +79,7 @@ h2{margin:0;font:800 20px/1.4 var(--display)}
 
 .desk{
   background:var(--surface);border:1px solid var(--line);border-radius:18px;
-  padding:clamp(12px,2.4vw,22px);display:grid;gap:12px;min-width:0
+  padding:clamp(12px,2.4vw,22px);display:grid;grid-template-columns:minmax(0,1fr);gap:12px;min-width:0
 }
 
 /* toolbar */
@@ -110,7 +112,7 @@ textarea{
 .grip span{width:46px;height:5px;border-block:1px solid var(--tray-edge);opacity:.8}
 
 /* keyboard */
-.deck{display:grid;gap:10px;min-width:0}
+.deck{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;min-width:0}
 .tray{
   background:var(--tray);border-radius:12px;padding:clamp(6px,1.4vw,12px);
   box-shadow:inset 0 2px 0 var(--tray-hi),inset 0 -3px 0 var(--tray-edge);min-width:0
@@ -121,11 +123,11 @@ textarea{
 .syms{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));gap:var(--kgap)}
 .marks{grid-auto-rows:calc(var(--kh)*.8)}
 .key{
-  position:relative;min-width:0;height:var(--kh);padding:7px 0 0;border:0;border-radius:9px;
+  position:relative;width:100%;min-width:0;height:var(--kh);padding:7px 0 0;border:0;border-radius:9px;
   background:linear-gradient(180deg,var(--key-top),var(--key-bot));
   box-shadow:0 3px 0 var(--key-edge),inset 0 1px 0 var(--key-hi);
   display:flex;align-items:center;justify-content:center;
-  cursor:pointer;user-select:none;-webkit-user-select:none;
+  cursor:pointer;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;
   -webkit-tap-highlight-color:transparent;touch-action:manipulation;color:var(--ink)
 }
 .key:hover{filter:brightness(1.04)}
@@ -155,7 +157,7 @@ select{height:44px;width:100%;border-radius:10px;border:1px solid var(--line);ba
   font:400 clamp(20px,3.6vw,26px)/1.9 var(--text-font);overflow-wrap:anywhere
 }
 .tf-out.empty{color:var(--muted);font:400 15px/1.9 var(--body)}
-.info{display:grid;gap:26px;padding-inline:4px}
+.info{display:grid;grid-template-columns:minmax(0,1fr);gap:26px;padding-inline:4px}
 .info section{scroll-margin-top:16px}
 .info h2.q{
   display:flex;align-items:center;gap:10px;margin:0 0 10px;padding-bottom:6px;
@@ -183,10 +185,28 @@ kbd{font:600 13px var(--body);padding:1px 7px;border-radius:6px;border:1px solid
   body.printing #printArea{display:block;white-space:pre-wrap;color:#000;background:#fff;font:22px/2 "Amiri","Noto Naskh Arabic",serif}
 }
 @media (max-width:640px){
+  :root{--kgap:2px;--kh:42px}
+  .desk{padding:8px;border-radius:14px}
+  .seg{display:flex;width:100%}
+  .seg>*{flex:1 1 0;min-width:0;padding:0 4px;font-size:14px}
+  .bar{gap:8px 14px}
+  .tray{padding:4px;border-radius:10px}
   .key .lat{display:none}
+  .key .ar{font-size:15px}
+  .key.fn{font-size:10px}
+  .key.enter{font-size:10px}
+  .lower{grid-template-columns:minmax(0,1fr)}
+  .marks{grid-template-columns:repeat(8,minmax(0,1fr));grid-auto-rows:calc(var(--kh)*.9)}
   .tf-row{grid-template-columns:minmax(0,1fr)}
-  textarea{font-size:24px;height:180px}
-  .key.fn{font-size:9px}
+  textarea{font-size:24px;height:140px;padding:10px 14px}
+  .grow:empty{display:none}
+  .grow{flex-basis:100%;font-size:13px}
+  .chk{font-size:13px}
+  .logo{width:52px;height:52px;border-radius:13px}
+  .brand{gap:10px}
+  h1{font-size:clamp(21px,6vw,28px)}
+  .info h2.q{font-size:18px}
+  .site-foot{padding:14px 16px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
